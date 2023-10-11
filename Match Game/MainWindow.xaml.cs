@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Match_Game
 {
@@ -20,11 +22,29 @@ namespace Match_Game
     /// </summary>
     public partial class MainWindow : Window
     {
+        DispatcherTimer timer = new DispatcherTimer();
+        int tenthsOfSecondsElapsed;
+        int matchesFound;
+
         public MainWindow()
         {
             InitializeComponent();
             SetUpGame();
+            timer.Interval = TimeSpan.FromSeconds(.01);
+            timer.Tick += Timer_Tick;
         }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            tenthsOfSecondsElapsed++;
+            timeTextBlock.Text = (tenthsOfSecondsElapsed / 10f).ToString("0.0s");
+            if (matchesFound == 8)
+            {
+                timer.Stop();
+                timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
+            }
+        }
+
         private void SetUpGame()
         {
             List<string> FoodEmoji = new List<string>()
@@ -41,13 +61,54 @@ namespace Match_Game
 
             Random random = new Random();
 
-            foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>()) 
+            foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
-                int index = random.Next(FoodEmoji.Count);
-                string nextEmoji = FoodEmoji[index];
-                textBlock.Text = nextEmoji;
-                FoodEmoji.RemoveAt(index);
+                if (textBlock.Name != "timeTextBlock")
+                {
+                    textBlock.Visibility = Visibility.Visible;
+                    int index = random.Next(FoodEmoji.Count);
+                    string nextEmoji = FoodEmoji[index];
+                    textBlock.Text = nextEmoji;
+                    FoodEmoji.RemoveAt(index);
 
+                }
+            }
+                timer.Start();
+            tenthsOfSecondsElapsed = 0;
+            matchesFound = 0;
+        }
+        TextBlock lastTextBlockClicked;
+        bool findingMatch = false;
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            if (findingMatch == false)
+            {
+                textBlock.Visibility = Visibility.Hidden;
+                lastTextBlockClicked = textBlock;
+                findingMatch = true;
+                Debug.WriteLine("MatchFound");
+            }
+
+            else if (textBlock.Text == lastTextBlockClicked.Text)
+            {
+                matchesFound++;
+                textBlock.Visibility = Visibility.Hidden;
+                findingMatch = false;
+            }
+            else
+            {
+                lastTextBlockClicked.Visibility = Visibility.Visible;
+                findingMatch = false;
+            }
+        }
+
+        private void timeTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (matchesFound == 8)
+            {
+                SetUpGame();
             }
         }
     }
