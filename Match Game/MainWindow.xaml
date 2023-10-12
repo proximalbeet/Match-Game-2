@@ -37,7 +37,11 @@
         <TextBlock x:Name="Animal1_Copy2" Grid.Column="3" HorizontalAlignment="Center" Text="?" FontSize="36" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown"/>
         <TextBlock x:Name="Animal2_Copy2" Grid.Column="2" HorizontalAlignment="Center" Text="?" FontSize="36" VerticalAlignment="Center" MouseDown="TextBlock_MouseDown"/>
         <TextBlock x:Name="Animal3_Copy2" HorizontalAlignment="Center" Text="?" FontSize="36"  VerticalAlignment="Center" MouseDown="TextBlock_MouseDown"/>
-        <TextBlock x:Name="timeTextBlock" Margin="14,0,14,0" Grid.Row="4" TextWrapping="Wrap" Text="Elapsed time" VerticalAlignment="Center" Width="172" Height="48" Grid.Column="1" Grid.ColumnSpan="2" FontSize="30" MouseDown="timeTextBlock_MouseDown"/>
+        <TextBlock x:Name="timeTextBlock" Margin="18,0,10,0" Grid.Row="4" TextWrapping="Wrap" Text="Elapsed time" VerticalAlignment="Center" Width="172" Height="48" Grid.ColumnSpan="2" FontSize="30" MouseDown="timeTextBlock_MouseDown"/>
+        <TextBlock x:Name="bestTimeTextBlock" Margin="10,0,18,0" Grid.Row="4" TextWrapping="Wrap" Text="Best time" VerticalAlignment="Center" Width="172" Height="48" Grid.ColumnSpan="2" FontSize="30" MouseDown="timeTextBlock_MouseDown" Grid.Column="2"/>
+        <TextBlock x:Name="textRight" Margin="10,87,32,0" Grid.Row="3" TextWrapping="Wrap" Text="Best time" VerticalAlignment="Top" Height="8" FontSize="8" MouseDown="timeTextBlock_MouseDown" Grid.RowSpan="2"/>
+        <TextBlock x:Name="textWrong" Margin="10,59,42,0" Grid.Row="3" TextWrapping="Wrap" Text="Best time" VerticalAlignment="Top" Height="8" FontSize="8" MouseDown="timeTextBlock_MouseDown"/>
+        <TextBlock x:Name="textPercent" Margin="10,73,42,0" Grid.Row="3" TextWrapping="Wrap" Text="Best time" VerticalAlignment="Top" Height="8" FontSize="8" MouseDown="timeTextBlock_MouseDown"/>
 
 
 

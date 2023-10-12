@@ -26,6 +26,10 @@ namespace Match_Game
         int tenthsOfSecondsElapsed;
         int matchesFound;
 
+
+        int rightPicks = 0;
+        int wrongPicks = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +45,10 @@ namespace Match_Game
             if (matchesFound == 8)
             {
                 timer.Stop();
+                if (int.Parse(timeTextBlock.Text) < int.Parse(bestTimeTextBlock.Text)) 
+                { 
+                 bestTimeTextBlock.Text = "High Score:" + timeTextBlock.Text; 
+                }
                 timeTextBlock.Text = timeTextBlock.Text + " - Play again?";
             }
         }
@@ -63,7 +71,7 @@ namespace Match_Game
 
             foreach (TextBlock textBlock in mainGrid.Children.OfType<TextBlock>())
             {
-                if (textBlock.Name != "timeTextBlock")
+                if (textBlock.Name != "timeTextBlock" && textBlock.Name != "textRight" && textBlock.Name != "textWrong" && textBlock.Name != "textPercent" && textBlock.Name != "bestTimeTextBlock")
                 {
                     textBlock.Visibility = Visibility.Visible;
                     int index = random.Next(FoodEmoji.Count);
@@ -71,7 +79,7 @@ namespace Match_Game
                     textBlock.Text = nextEmoji;
                     FoodEmoji.RemoveAt(index);
 
-                }
+                } 
             }
                 timer.Start();
             tenthsOfSecondsElapsed = 0;
@@ -83,6 +91,8 @@ namespace Match_Game
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
+
+            // Not looking for match yet
             if (findingMatch == false)
             {
                 textBlock.Visibility = Visibility.Hidden;
@@ -90,18 +100,31 @@ namespace Match_Game
                 findingMatch = true;
                 Debug.WriteLine("MatchFound");
             }
-
+            // Looking for match and found one
             else if (textBlock.Text == lastTextBlockClicked.Text)
             {
                 matchesFound++;
                 textBlock.Visibility = Visibility.Hidden;
                 findingMatch = false;
+                rightPicks++;
+                updateStats();
             }
+            // Looking for match, didn't find one
             else
             {
                 lastTextBlockClicked.Visibility = Visibility.Visible;
                 findingMatch = false;
+                wrongPicks++;
+                updateStats();
             }
+        }
+
+        private void updateStats() 
+        { 
+            textRight.Text = rightPicks.ToString();
+            textWrong.Text = wrongPicks.ToString();
+            float p = (float)rightPicks / (float)(rightPicks + wrongPicks);
+            textPercent.Text = p.ToString();
         }
 
         private void timeTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
